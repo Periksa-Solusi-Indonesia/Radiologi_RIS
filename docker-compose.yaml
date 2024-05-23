@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  orthanc:
+    image: orthancteam/orthanc:latest-full
+    restart: unless-stopped
+    ports:
+      - "8042:8042" # DICOM SCP/SCU (modify if needed)
+      - "4242:4242"
+    environment:
+      VERBOSE_STARTUP: true
+      SERVE_FOLDERS_PLUGIN_ENABLED: true
+      TRANSFERS_PLUGIN_ENABLED: true
+      ORTHANC_WEB_VIEWER_PLUGIN_ENABLED: true
+      OSIMIS_WEB_VIEWER1_ALPHA_PLUGIN_ENABLED: true
+      VOLVIEW_PLUGIN_ENABLED: true
+      OHIF_PLUGIN_ENABLED: true
+      ORTHANC_DB_HOST: postgres
+      ORTHANC_DB_USER: orthanc
+      ORTHANC_DB_PASSWORD: orthanc_password
+      ORTHANC_DB_NAME: orthanc
+      DICOM_WEB_PLUGIN_ENABLED: |
+        "DicomWeb": true
+        "Enable": true
+      ORTHANC_EXPLORER_2_ENABLED: | # Multi-line YAML for clarity
+        "Enable": true
+        "IsDefaultOrthancUI": false
+    volumes:
+      - orthanc-data:/var/www/orthanc
+      - ./orthanc.json:/etc/orthanc/orthanc.json
+      - /path/to/output:/path/to/output # Mount untuk output file sistem
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14.0
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: orthanc
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  dicom-kemenkes:
+    image: registry.dto.kemkes.go.id/pub/dicom-router:latest
+    container_name: dicom-router
+    restart: always
+    ports:
+      - "11112:11112"
+      - "8080:8080"
+    environment:
+      - ORG_ID=b2c4cd4e-6865-4ecd-b664-7af0aedd0183
+      - CLIENT=IGNwhf2TAgx6W5ZOW6W6BPOfKrVwtmOU3sZ2pVDI70dV3cjc
+      - SECRET=u3P9ye87joaOJBcyoYbNxhZTOhnDgLpPmI415A4Vm1emk3q8AJAf1T8SsgWsluAV
+      - URL=https://api-satusehat-stg.dto.kemkes.go.id
+    networks:
+      - dicom-network
+
+networks:
+  dicom-network:
+    driver: bridge
+
+volumes:
+  orthanc-data: {}
+  postgres-data: {}
