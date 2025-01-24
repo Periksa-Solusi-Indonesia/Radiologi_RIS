@@ -26,6 +26,12 @@ services:
       ORTHANC_EXPLORER_2_ENABLED: | # Multi-line YAML for clarity
         "Enable": true
         "IsDefaultOrthancUI": false
+      WORKLISTS_PLUGIN_ENABLED: |
+        "Enable": true
+        "Database": "/var/lib/orthanc/worklists"
+      INDEXER_PLUGIN_ENABLED: true
+      TRANSFERS_PLUGIN_ENABLED: true
+      
     volumes:
       - orthanc-data:/var/www/orthanc
       - ./orthanc.json:/etc/orthanc/orthanc.json
