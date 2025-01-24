@@ -30,7 +30,6 @@ services:
         "Enable": true
         "Database": "/var/lib/orthanc/worklists"
       INDEXER_PLUGIN_ENABLED: true
-      TRANSFERS_PLUGIN_ENABLED: true
       
     volumes:
       - orthanc-data:/var/www/orthanc
