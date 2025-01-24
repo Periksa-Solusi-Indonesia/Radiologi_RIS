@@ -4,46 +4,44 @@ services:
   orthanc:
     image: orthancteam/orthanc:latest-full
     restart: unless-stopped
-    container_name: orthanc
     ports:
       - "8042:8042" # DICOM SCP/SCU (modify if needed)
       - "4242:4242"
     environment:
-      VERBOSE_STARTUP: "true"
-      SERVE_FOLDERS_PLUGIN_ENABLED: "true"
-      TRANSFERS_PLUGIN_ENABLED: "true"
-      ORTHANC_WEB_VIEWER_PLUGIN_ENABLED: "true"
-      OSIMIS_WEB_VIEWER1_ALPHA_PLUGIN_ENABLED: "true"
-      VOLVIEW_PLUGIN_ENABLED: "true"
-      OHIF_PLUGIN_ENABLED: "true"
-      ORTHANC_DB_HOST: "postgres"
-      ORTHANC_DB_USER: "orthanc"
-      ORTHANC_DB_PASSWORD: "orthanc_password"
-      ORTHANC_DB_NAME: "orthanc"
-      DICOM_WEB_PLUGIN_ENABLED: '{"DicomWeb": true, "Enable": true}'
-      ORTHANC_EXPLORER_2_ENABLED: '{"Enable": true, "IsDefaultOrthancUI": false}'
-      WORKLISTS_PLUGIN_ENABLED: '{"Enable": true, "Database": "/var/lib/orthanc/worklists"}'
-      INDEXER_PLUGIN_ENABLED: "true"
+      VERBOSE_STARTUP: true
+      SERVE_FOLDERS_PLUGIN_ENABLED: true
+      TRANSFERS_PLUGIN_ENABLED: true
+      ORTHANC_WEB_VIEWER_PLUGIN_ENABLED: true
+      OSIMIS_WEB_VIEWER1_ALPHA_PLUGIN_ENABLED: true
+      VOLVIEW_PLUGIN_ENABLED: true
+      OHIF_PLUGIN_ENABLED: true
+      ORTHANC_DB_HOST: postgres
+      ORTHANC_DB_USER: orthanc
+      ORTHANC_DB_PASSWORD: orthanc_password
+      ORTHANC_DB_NAME: orthanc
+      DICOM_WEB_PLUGIN_ENABLED: |
+        "DicomWeb": true
+        "Enable": true
+      ORTHANC_EXPLORER_2_ENABLED: | # Multi-line YAML for clarity
+        "Enable": true
+        "IsDefaultOrthancUI": false
     volumes:
-      - orthanc-data:/var/lib/orthanc
+      - orthanc-data:/var/www/orthanc
       - ./orthanc.json:/etc/orthanc/orthanc.json
-      #- C:/Users/YourUsername/Documents:/path/to/output # Replace with actual Windows document path
-      #- C:/Users/YourUsername/Documents/orthanc:/var/lib/orthanc/output # Replace with actual Windows orthanc path
+      - /path/to/output:/path/to/output # Mount untuk output file sistem
     depends_on:
       - postgres
 
   postgres:
     image: postgres:14.0
     restart: unless-stopped
-    container_name: postgres
     environment:
-      POSTGRES_PASSWORD: "postgres_password"
-      POSTGRES_USER: "postgres"
-      POSTGRES_DB: "orthanc"
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: orthanc
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  # Uncomment and configure these services if needed
   # dicom-kemenkes:
   #   image: registry.dto.kemkes.go.id/pub/dicom-router:latest
   #   container_name: dicom-router
@@ -58,31 +56,30 @@ services:
   #     - URL=https://api-satusehat-stg.dto.kemkes.go.id
   #   networks:
   #     - dicom-network
-
+      
   # portainer:
   #   image: portainer/portainer-ce
-  #   container_name: portainer
   #   ports:
   #     - "9000:9000"
   #   volumes:
   #     - /var/run/docker.sock:/var/run/docker.sock
   #     - portainer_data:/data
-
-  # nginx-proxy:
-  #   image: "jc21/nginx-proxy-manager:latest"
-  #   container_name: nginx-proxy
-  #   environment:
-  #     - PUID=1000
-  #     - PGID=1000
-  #     - TZ=Asia/Jakarta
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #     - "81:81"
-  #     - "443:443"
-  #   volumes:
-  #     - ./data:/data
-  #     - ./letsencrypt:/etc/letsencrypt
+      
+#  nginx-proxy:
+#     image: 'jc21/nginx-proxy-manager:latest'
+#     container_name: nginx-proxy
+#     environment:
+#       - PUID=1000
+#       - PGID=1000
+#       - TZ=Asia/Jakarta
+#     restart: unless-stopped
+#     ports:
+#       - '80:80'
+#       - '81:81'
+#       - '443:443'
+#     volumes:
+#       - ./data:/data
+#       - ./letsencrypt:/etc/letsencrypt
 
 networks:
   dicom-network:
