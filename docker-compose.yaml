@@ -8,6 +8,7 @@ services:
       - "8042:8042" # DICOM SCP/SCU (modify if needed)
       - "4242:4242"
     environment:
+      ORTHANC__REGISTERED_USERS: "{}"
       VERBOSE_STARTUP: true
       SERVE_FOLDERS_PLUGIN_ENABLED: true
       TRANSFERS_PLUGIN_ENABLED: true
