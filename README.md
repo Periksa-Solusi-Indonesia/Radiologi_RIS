@@ -95,3 +95,25 @@ Orthanc is licensed under the GNU General Public License (GPL), ensuring it rema
 Orthanc is a robust and versatile DICOM server, perfect for managing medical imaging data in research and clinical environments. With its user-friendly interface, powerful API, and active community, Orthanc makes it easy to handle and integrate DICOM files into your workflows.
 
 For more information, visit the [Orthanc official website](https://www.orthanc-server.com/) and explore the extensive [documentation](https://book.orthanc-server.com/).
+
+## S3
+
+"AwsS3Storage" : {
+   "BucketName": "nama-bucket-anda",
+   "Region" : "region-anda",
+   "AccessKey" : "AWS_ACCESS_KEY_ANDA",
+   "SecretKey" : "AWS_SECRET_KEY_ANDA",
+   "Endpoint": "", // Opsional: endpoint khusus jika menggunakan S3 kompatibel
+   "ConnectionTimeout": 30, // Opsional: waktu tunggu koneksi dalam detik
+   "RequestTimeout": 1200, // Opsional: waktu tunggu permintaan dalam detik
+   "RootPath": "", // Opsional: path root dalam bucket
+   "MigrationFromFileSystemEnabled": false, // Opsional: migrasi dari sistem file
+   "StorageStructure": "flat", // Opsional: struktur penyimpanan
+   "EnableLegacyUnknownFiles": true, // Opsional: kompatibilitas berkas lama
+   "VirtualAddressing": true, // Opsional: pengalamatan virtual
+   "StorageEncryption" : {}, // Opsional: konfigurasi enkripsi
+   "HybridMode": "Disabled", // Opsional: mode hibrid
+   "UseTransferManager": false, // Opsional: penggunaan transfer manager
+   "EnableAwsSdkLogs": false, // Opsional: log SDK AWS
+   "StorageClass": "STANDARD" // Opsional: kelas penyimpanan
+}

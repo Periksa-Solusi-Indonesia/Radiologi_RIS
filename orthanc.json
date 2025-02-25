@@ -1,7 +1,5 @@
 {
   "RestApiWriteToFileSystemEnabled": true,
   "RemoteAccessAllowed": true,
-  "RegisteredUsers": {
-    "orthanc": "orthanc_password"
-  }
+  "AuthenticationEnabled": false
 }
