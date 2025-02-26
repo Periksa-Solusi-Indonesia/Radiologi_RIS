@@ -17,6 +17,10 @@ services:
       OSIMIS_WEB_VIEWER1_ALPHA_PLUGIN_ENABLED: "true"
       VOLVIEW_PLUGIN_ENABLED: "true"
       OHIF_PLUGIN_ENABLED: "true"
+      # Mengaktifkan MPPS SCP
+      MPPS_SCP_PLUGIN_ENABLED: "true"
+      MPPS_SCP_AE_TITLE: "PACS_SERVER"  # AE Title yang sama dengan modalitas
+      MPPS_SCP_PORT: "4242"
       # Konfigurasi koneksi ke PostgreSQL
       ORTHANC_DB_HOST: "postgresql"
       ORTHANC_DB_USER: "orthanc"
