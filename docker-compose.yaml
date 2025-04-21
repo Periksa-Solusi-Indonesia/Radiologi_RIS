@@ -8,7 +8,6 @@ services:
       - "8042:8042"
       - "4242:4242"
     environment:
-      # Konfigurasi Orthanc
       ORTHANC__REGISTERED_USERS: "{}"
       VERBOSE_STARTUP: "true"
       SERVE_FOLDERS_PLUGIN_ENABLED: "true"
@@ -17,22 +16,21 @@ services:
       OSIMIS_WEB_VIEWER1_ALPHA_PLUGIN_ENABLED: "true"
       VOLVIEW_PLUGIN_ENABLED: "true"
       OHIF_PLUGIN_ENABLED: "true"
-      # Mengaktifkan MPPS SCP
       MPPS_SCP_PLUGIN_ENABLED: "true"
-      MPPS_SCP_AE_TITLE: "PACS_SERVER"  # AE Title yang sama dengan modalitas
+      MPPS_SCP_AE_TITLE: "PACS_SERVER"
       MPPS_SCP_PORT: "4242"
-      # Konfigurasi koneksi ke PostgreSQL
       ORTHANC_DB_HOST: "postgresql"
       ORTHANC_DB_USER: "orthanc"
       ORTHANC_DB_PASSWORD: "orthanc_password"
       ORTHANC_DB_NAME: "orthanc"
-      # Plugin DICOM Web
       DICOM_WEB_PLUGIN_ENABLED: '{"DicomWeb": true, "Enable": true}'
-      # Orthanc Explorer 2
       ORTHANC_EXPLORER_2_ENABLED: '{"Enable": true, "IsDefaultOrthancUI": false}'
+      MODALITY_WORKLISTS_PLUGIN_ENABLED: "true"
+      MODALITY_WORKLISTS_DIRECTORY: "/worklists"
     volumes:
       - ./orthanc-data:/var/lib/orthanc/db
       - ./orthanc.json:/etc/orthanc/orthanc.json
+      - ./worklists:/worklists
     depends_on:
       - postgresql
     networks:
