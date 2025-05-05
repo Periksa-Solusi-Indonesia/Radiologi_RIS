@@ -36,21 +36,33 @@ def generate_dcm(order):
     file_meta = pydicom.Dataset()
     ds = FileDataset(filepath, {}, file_meta=file_meta, preamble=b"\0" * 128)
 
+    # Set karakter encoding
+    ds.SpecificCharacterSet = "ISO_IR 100"  # Latin-1
+
+    # Informasi pasien
     ds.PatientName = order['patient_name']
     ds.PatientID = order['patient_id']
     ds.AccessionNumber = order['accession_number']
-    ds.Modality = order.get('modality', 'CT')
-    ds.ScheduledStationAETitle = order.get('ae_title', 'CT01')
-    ds.ScheduledProcedureStepStartDate = order.get("date", now.strftime('%Y%m%d'))
-    ds.ScheduledProcedureStepStartTime = order.get("time", now.strftime('%H%M%S'))
 
+    # Worklist detail (harus pakai Sequence)
+    sps_item = pydicom.Dataset()
+    sps_item.Modality = order.get('modality', 'CT')
+    sps_item.ScheduledStationAETitle = order.get('ae_title', 'CT01')
+    sps_item.ScheduledProcedureStepStartDate = order.get("date", now.strftime('%Y%m%d'))
+    sps_item.ScheduledProcedureStepStartTime = order.get("time", now.strftime('%H%M%S'))
+    sps_item.ScheduledPerformingPhysicianName = "DR.SIMULASI"
+
+    ds.ScheduledProcedureStepSequence = [sps_item]
+
+    # DICOM Metadata
     ds.StudyInstanceUID = pydicom.uid.generate_uid()
     ds.SeriesInstanceUID = pydicom.uid.generate_uid()
     ds.SOPInstanceUID = pydicom.uid.generate_uid()
-    ds.SOPClassUID = "1.2.840.10008.5.1.4.31"
+    ds.SOPClassUID = "1.2.840.10008.5.1.4.31"  # Modality Worklist Information Model - FIND
 
     ds.save_as(filepath)
     print(f"✔ Generated dummy worklist: {filepath}")
+
 
 def main():
     for order in dummy_orders:

@@ -1,5 +1,9 @@
 {
   "RestApiWriteToFileSystemEnabled": true,
   "RemoteAccessAllowed": true,
-  "AuthenticationEnabled": false
+  "AuthenticationEnabled": false,
+  "DicomModalities": {
+    "FINDSCU": ["FINDSCU", "172.18.0.1", 4242],
+    "ANY": ["*", "*", 4242]
+  }
 }
