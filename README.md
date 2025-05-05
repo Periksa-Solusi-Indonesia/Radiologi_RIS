@@ -117,3 +117,7 @@ For more information, visit the [Orthanc official website](https://www.orthanc-s
    "EnableAwsSdkLogs": false, // Opsional: log SDK AWS
    "StorageClass": "STANDARD" // Opsional: kelas penyimpanan
 }
+
+cd radiology-cron
+pip install -r requirements.txt
+python3 main.py

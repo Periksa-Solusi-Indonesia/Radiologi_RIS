@@ -1,21 +1,32 @@
-import requests
 import os
 import datetime
-from dotenv import load_dotenv
-from pydicom.dataset import Dataset, FileDataset
+from pydicom.dataset import FileDataset
 import pydicom
 
-load_dotenv()
+# Path ke folder worklist (relative ke posisi script)
+WORKLIST_PATH = "../worklists"
 
-API_URL = os.getenv("API_URL")
-API_TOKEN = os.getenv("API_TOKEN")
-WORKLIST_PATH = os.getenv("WORKLIST_PATH", "./worklists")
-
-def fetch_orders():
-    headers = {"Authorization": f"Bearer {API_TOKEN}"}
-    response = requests.get(API_URL, headers=headers)
-    response.raise_for_status()
-    return response.json()
+# Data pasien dummy (bisa banyak)
+dummy_orders = [
+    {
+        "patient_name": "HANIFAH^SUTAN",
+        "patient_id": "P000123",
+        "accession_number": "RAD-20250505-0001",
+        "modality": "CT",
+        "ae_title": "CT01",
+        "date": "20250505",
+        "time": "081500"
+    },
+    {
+        "patient_name": "DOE^JOHN",
+        "patient_id": "P000124",
+        "accession_number": "RAD-20250505-0002",
+        "modality": "MR",
+        "ae_title": "MR01",
+        "date": "20250505",
+        "time": "090000"
+    }
+]
 
 def generate_dcm(order):
     now = datetime.datetime.now()
@@ -25,9 +36,9 @@ def generate_dcm(order):
     file_meta = pydicom.Dataset()
     ds = FileDataset(filepath, {}, file_meta=file_meta, preamble=b"\0" * 128)
 
-    ds.PatientName = order['patient_name']  # format: LAST^FIRST
-    ds.PatientID = order['patient_id'] # nomer rekam medis
-    ds.AccessionNumber = order['accession_number'] # log_status / reg radiologi
+    ds.PatientName = order['patient_name']
+    ds.PatientID = order['patient_id']
+    ds.AccessionNumber = order['accession_number']
     ds.Modality = order.get('modality', 'CT')
     ds.ScheduledStationAETitle = order.get('ae_title', 'CT01')
     ds.ScheduledProcedureStepStartDate = order.get("date", now.strftime('%Y%m%d'))
@@ -39,15 +50,11 @@ def generate_dcm(order):
     ds.SOPClassUID = "1.2.840.10008.5.1.4.31"
 
     ds.save_as(filepath)
-    print(f"✔ Generated: {filepath}")
+    print(f"✔ Generated dummy worklist: {filepath}")
 
 def main():
-    try:
-        orders = fetch_orders()
-        for order in orders:
-            generate_dcm(order)
-    except Exception as e:
-        print(f"❌ Error: {e}")
+    for order in dummy_orders:
+        generate_dcm(order)
 
 if __name__ == "__main__":
     main()
