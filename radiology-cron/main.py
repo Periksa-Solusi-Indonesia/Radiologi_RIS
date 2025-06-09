@@ -9,11 +9,11 @@ WORKLIST_PATH = "../worklists"
 # Data pasien dummy (bisa banyak)
 dummy_orders = [
     {
-        "patient_name": "HANIFAH^SUTAN",
+        "patient_name": "INDONESIA^PERIKSA",
         "patient_id": "P000123",
         "accession_number": "RAD-20250505-0001",
-        "modality": "CT",
-        "ae_title": "CT01",
+        "modality": "CT",  #{bisa di edit}
+        "ae_title": "CT01",  #{bisa di edit}
         "date": "20250505",
         "time": "081500"
     },
@@ -21,8 +21,8 @@ dummy_orders = [
         "patient_name": "DOE^JOHN",
         "patient_id": "P000124",
         "accession_number": "RAD-20250505-0002",
-        "modality": "MR",
-        "ae_title": "MR01",
+        "modality": "MR",  #{bisa di edit}
+        "ae_title": "MR01",  #{bisa di edit}
         "date": "20250505",
         "time": "090000"
     }
@@ -37,7 +37,7 @@ def generate_dcm(order):
     ds = FileDataset(filepath, {}, file_meta=file_meta, preamble=b"\0" * 128)
 
     # Set karakter encoding
-    ds.SpecificCharacterSet = "ISO_IR 100"  # Latin-1
+    ds.SpecificCharacterSet = "ISO_IR 100"  # Latin-1 {bisa di edit}
 
     # Informasi pasien
     ds.PatientName = order['patient_name']
@@ -46,11 +46,11 @@ def generate_dcm(order):
 
     # Worklist detail (harus pakai Sequence)
     sps_item = pydicom.Dataset()
-    sps_item.Modality = order.get('modality', 'CT')
-    sps_item.ScheduledStationAETitle = order.get('ae_title', 'CT01')
+    sps_item.Modality = order.get('modality', 'CT') #{bisa di edit}
+    sps_item.ScheduledStationAETitle = order.get('ae_title', 'CT01')  #{bisa di edit}
     sps_item.ScheduledProcedureStepStartDate = order.get("date", now.strftime('%Y%m%d'))
     sps_item.ScheduledProcedureStepStartTime = order.get("time", now.strftime('%H%M%S'))
-    sps_item.ScheduledPerformingPhysicianName = "DR.SIMULASI"
+    sps_item.ScheduledPerformingPhysicianName = "DR.SIMULASI"  #{bisa di edit}
 
     ds.ScheduledProcedureStepSequence = [sps_item]
 
@@ -58,7 +58,7 @@ def generate_dcm(order):
     ds.StudyInstanceUID = pydicom.uid.generate_uid()
     ds.SeriesInstanceUID = pydicom.uid.generate_uid()
     ds.SOPInstanceUID = pydicom.uid.generate_uid()
-    ds.SOPClassUID = "1.2.840.10008.5.1.4.31"  # Modality Worklist Information Model - FIND
+    ds.SOPClassUID = "1.2.840.10008.5.1.4.31"  # Modality Worklist Information Model - FIND  #{bisa di edit}
 
     ds.save_as(filepath)
     print(f"✔ Generated dummy worklist: {filepath}")
