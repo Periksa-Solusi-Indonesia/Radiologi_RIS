@@ -3,7 +3,9 @@
   "RemoteAccessAllowed": true,
   "AuthenticationEnabled": false,
   "DicomModalities": {
-    "FINDSCU": ["FINDSCU", "172.18.0.1", 4242],  #{bisa di edit}  {FINDSCU Mengikuti AE Title}
+    "FINDSCU": ["FINDSCU", "172.18.0.1", 4242],
     "ANY": ["*", "*", 4242]
   }
 }
+
+//{bisa di edit}  {FINDSCU Mengikuti AE Title}
