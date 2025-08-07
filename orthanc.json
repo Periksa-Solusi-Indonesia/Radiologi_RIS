@@ -2,10 +2,17 @@
   "RestApiWriteToFileSystemEnabled": true,
   "RemoteAccessAllowed": true,
   "AuthenticationEnabled": false,
+  "ModalityWorklists" : {
+    "Enable" : true,
+    "DicomAet" : "PACS_SERVER",
+    "StoragePath" : "/worklists"
+  },
   "DicomModalities": {
-    "FINDSCU": ["FINDSCU", "172.18.0.1", 4242],
-    "ANY": ["*", "*", 4242]
+    "PACS_SERVER": ["PACS_SERVER", "127.0.0.1", 4242]
   }
 }
 
-//{bisa di edit}  {FINDSCU Mengikuti AE Title}
+// "DicomModalities": {
+//   "CT01": ["CT01", "192.168.1.50", 104]
+// }
+

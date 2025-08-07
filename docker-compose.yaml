@@ -27,6 +27,7 @@ services:
       ORTHANC_EXPLORER_2_ENABLED: '{"Enable": true, "IsDefaultOrthancUI": false}'
       MODALITY_WORKLISTS_PLUGIN_ENABLED: "true"
       MODALITY_WORKLISTS_DIRECTORY: "/worklists"
+      ORTHANC__Verbose: "true"
     volumes:
       - ./orthanc-data:/var/lib/orthanc/db
       - ./orthanc.json:/etc/orthanc/orthanc.json
@@ -36,32 +37,32 @@ services:
     networks:
       - dicom-network
 
-  postgresql:
-    image: bitnami/postgresql:14.17.0
-    restart: unless-stopped
-    environment:
-      - POSTGRESQL_USERNAME=orthanc
-      - POSTGRESQL_PASSWORD=orthanc_password
-      - POSTGRESQL_DATABASE=orthanc
-      - ALLOW_EMPTY_PASSWORD=no
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./postgresql_data:/bitnami/postgresql
-    networks:
-      - dicom-network
+  # postgresql:
+  #   image: bitnami/postgresql:14.17.0
+  #   restart: unless-stopped
+  #   environment:
+  #     - POSTGRESQL_USERNAME=orthanc
+  #     - POSTGRESQL_PASSWORD=orthanc_password
+  #     - POSTGRESQL_DATABASE=orthanc
+  #     - ALLOW_EMPTY_PASSWORD=no
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - ./postgresql_data:/bitnami/postgresql
+  #   networks:
+  #     - dicom-network
 
-  pgweb:
-    image: sosedoff/pgweb
-    restart: unless-stopped
-    ports:
-      - "8081:8081"
-    environment:
-      PGWEB_DATABASE_URL: "postgres://orthanc:orthanc_password@postgresql:5432/orthanc?sslmode=disable"
-    depends_on:
-      - postgresql
-    networks:
-      - dicom-network
+  # pgweb:
+  #   image: sosedoff/pgweb
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     PGWEB_DATABASE_URL: "postgres://orthanc:orthanc_password@postgresql:5432/orthanc?sslmode=disable"
+  #   depends_on:
+  #     - postgresql
+  #   networks:
+  #     - dicom-network
 
 networks:
   dicom-network:
