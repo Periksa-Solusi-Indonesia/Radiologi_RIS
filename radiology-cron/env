@@ -1,3 +1,0 @@
-API_URL=https://example.com/api/radiology-orders
-API_TOKEN=your-api-token-here
-WORKLIST_PATH=../worklists
