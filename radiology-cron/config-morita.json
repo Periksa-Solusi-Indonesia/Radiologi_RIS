@@ -1,0 +1,14 @@
+{
+  "max_studies_per_hour": 30,
+    "default_modalities": ["CR", "DX", "IO", "PX"],
+    "default_ae_titles": {
+        "CR": "MORITA_CR",
+        "DX": "MORITA_DX",
+        "IO": "MORITA_IO", 
+        "PX": "MORITA_PX"
+    },
+    "character_set": "ISO_IR 100",
+    "performing_physician": "DR.RADIOLOGI",
+    "manufacturer": "J. Morita Mfg. Corp",
+    "station_name": "MORITA_WORKSTATION"
+}
