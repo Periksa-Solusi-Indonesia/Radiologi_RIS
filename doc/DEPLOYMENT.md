@@ -4,7 +4,7 @@
 
 1. **Start services:**
    ```bash
-   docker-compose up -d
+   docker-compose up -d atau  docker compose up -d
    ```
 
 2. **Access interfaces:**
@@ -50,6 +50,7 @@ https://www.dicomlibrary.com/dicom/modality/
 cd radiology-cron
 python3 main.py
 ```
+- check : pip install pydicom
 
 ## Troubleshooting
 

@@ -1,0 +1,17 @@
+{
+  "max_studies_per_hour": 50,
+  "default_modalities": [
+    "CT",
+    "MR",
+    "XR",
+    "US"
+  ],
+  "default_ae_titles": {
+    "CT": "CT01",
+    "MR": "MR01",
+    "XR": "XR01",
+    "US": "US01"
+  },
+  "character_set": "ISO_IR 100",
+  "performing_physician": "DR.RADIOLOGI"
+}

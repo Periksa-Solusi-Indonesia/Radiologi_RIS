@@ -4,5 +4,4 @@
 /backups
 *.log
 .env
-config.json
 .dcm
