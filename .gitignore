@@ -1,4 +1,8 @@
 /orthanc-data
 /postgresql_data
-
+/data
+/backups
+*.log
+.env
+config.json
 .dcm

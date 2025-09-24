@@ -1,15 +1,34 @@
 {
   "RestApiWriteToFileSystemEnabled": true,
   "RemoteAccessAllowed": true,
-  "AuthenticationEnabled": false,
-  "ModalityWorklists" : {
-    "Enable" : true,
-    "DicomAet" : "PACS_SERVER",
-    "StoragePath" : "/worklists"
+  "AuthenticationEnabled": true,
+  "RegisteredUsers": {
+    "admin": "admin123",
+    "radiologist": "radio123"
+  },
+  "Worklists": {
+    "Enable": true,
+    "Database": "/worklists"
   },
   "DicomModalities": {
-    "PACS_SERVER": ["PACS_SERVER", "127.0.0.1", 4242]
-  }
+    "PACS_SERVER": ["PACS_SERVER", "127.0.0.1", 4242],
+    "CT01": ["CT01", "192.168.1.50", 104],
+    "MR01": ["MR01", "192.168.1.51", 104]
+  },
+  "DicomAet": "ORTHANC",
+  "DicomPort": 4242,
+  "HttpPort": 8042,
+  "MaximumStorageSize": 0,
+  "MaximumPatientCount": 0,
+  "LimitFindResults": 100,
+  "LimitFindInstances": 100,
+  "LogExportedResources": true,
+  "LogIncomingInstancesOnDiskSpace": true,
+  "KeepAlive": true,
+  "TcpNoDelay": true,
+  "HttpTimeout": 60,
+  "DicomScuTimeout": 10,
+  "DicomScpTimeout": 30
 }
 
 // "DicomModalities": {

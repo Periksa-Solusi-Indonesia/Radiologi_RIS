@@ -37,32 +37,45 @@ services:
     networks:
       - dicom-network
 
-  # postgresql:
-  #   image: bitnami/postgresql:14.17.0
-  #   restart: unless-stopped
-  #   environment:
-  #     - POSTGRESQL_USERNAME=orthanc
-  #     - POSTGRESQL_PASSWORD=orthanc_password
-  #     - POSTGRESQL_DATABASE=orthanc
-  #     - ALLOW_EMPTY_PASSWORD=no
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - ./postgresql_data:/bitnami/postgresql
-  #   networks:
-  #     - dicom-network
+  postgresql:
+    image: bitnami/postgresql:14.17.0
+    restart: unless-stopped
+    environment:
+      - POSTGRESQL_USERNAME=orthanc
+      - POSTGRESQL_PASSWORD=orthanc_password
+      - POSTGRESQL_DATABASE=orthanc
+      - ALLOW_EMPTY_PASSWORD=no
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgresql_data:/bitnami/postgresql
+    networks:
+      - dicom-network
 
-  # pgweb:
-  #   image: sosedoff/pgweb
-  #   restart: unless-stopped
-  #   ports:
-  #     - "8081:8081"
-  #   environment:
-  #     PGWEB_DATABASE_URL: "postgres://orthanc:orthanc_password@postgresql:5432/orthanc?sslmode=disable"
-  #   depends_on:
-  #     - postgresql
-  #   networks:
-  #     - dicom-network
+  pgweb:
+    image: sosedoff/pgweb
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      PGWEB_DATABASE_URL: "postgres://orthanc:orthanc_password@postgresql:5432/orthanc?sslmode=disable"
+    depends_on:
+      - postgresql
+    networks:
+      - dicom-network
+
+  backup:
+    image: postgres:14
+    restart: "no"
+    environment:
+      PGPASSWORD: orthanc_password
+    volumes:
+      - ./backups:/backups
+      - ./scripts:/scripts
+    networks:
+      - dicom-network
+    profiles:
+      - backup
 
 networks:
   dicom-network:
