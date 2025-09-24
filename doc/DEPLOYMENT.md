@@ -39,8 +39,10 @@
 ## Modality Configuration
 
 Configured modalities:
-- CT01: 192.168.1.50:104
+- IO01: 192.168.1.50:104
 - MR01: 192.168.1.51:104
+
+https://www.dicomlibrary.com/dicom/modality/
 
 ## Worklist Generation
 
