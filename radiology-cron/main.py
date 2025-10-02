@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 # Path ke folder worklist
 WORKLIST_PATH = "../worklists"
-CONFIG_PATH = "config-mirota.json"
+CONFIG_PATH = "config.json"
 
 # Default configuration for USG LOGIQ F5
 DEFAULT_CONFIG = {
