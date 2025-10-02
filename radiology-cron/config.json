@@ -7,5 +7,25 @@
     "US": "LOGIQF5"
   },
   "character_set": "ISO_IR 100",
-  "performing_physician": "DR.RADIOLOGI"
+  "performing_physician": "DR.RADIOLOGI",
+  "usg_logiq_f5": {
+    "station_name": "USG_LOGIQ_F5",
+    "manufacturer": "GE Healthcare",
+    "model": "LOGIQ F5",
+    "software_version": "R1.0.0",
+    "default_procedure_codes": {
+      "abdomen": "US_ABD",
+      "pelvis": "US_PEL",
+      "obstetric": "US_OB",
+      "gynecology": "US_GYN",
+      "thyroid": "US_THY",
+      "breast": "US_BRE"
+    }
+  },
+  "network": {
+    "logiq_f5_ip": "192.168.1.100",
+    "logiq_f5_port": 104,
+    "orthanc_ae_title": "ORTHANC",
+    "orthanc_port": 4242
+  }
 }

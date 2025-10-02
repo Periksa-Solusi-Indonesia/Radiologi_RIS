@@ -51,13 +51,15 @@ def load_config():
 def get_his_data():
     """Simulate HIS/RIS integration for USG LOGIQ F5"""
     today = datetime.datetime.now().strftime('%Y%m%d')
-    
+    # Short date format for accession number (last 6 digits: YYMMDD)
+    short_date = today[2:]  # 20251002 -> 251002
+
     # USG LOGIQ F5 specific procedures
     return [
         {
             "patient_name": "INDONESIA^PERIKSA",
             "patient_id": "P000123",
-            "accession_number": f"USG-{today}-0001",
+            "accession_number": f"US{short_date}001",  # US251002001 (11 chars)
             "modality": "US",
             "ae_title": "LOGIQF5",
             "date": today,
@@ -67,8 +69,8 @@ def get_his_data():
         },
         {
             "patient_name": "DOE^JANE",
-            "patient_id": "P000124", 
-            "accession_number": f"USG-{today}-0002",
+            "patient_id": "P000124",
+            "accession_number": f"US{short_date}002",  # US251002002 (11 chars)
             "modality": "US",
             "ae_title": "LOGIQF5",
             "date": today,
@@ -80,7 +82,7 @@ def get_his_data():
 
 def generate_worklist_dcm(order, config):
     """Generate DICOM worklist file for USG LOGIQ F5"""
-    filename = f"USG-{order['accession_number']}.dcm"
+    filename = f"{order['accession_number']}.dcm"
     filepath = os.path.join(WORKLIST_PATH, filename)
 
     file_meta = pydicom.Dataset()
