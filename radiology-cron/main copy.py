@@ -13,29 +13,18 @@ logger = logging.getLogger(__name__)
 WORKLIST_PATH = "../worklists"
 CONFIG_PATH = "config-mirota.json"
 
-# Default configuration for USG LOGIQ F5
+# Default configuration
 DEFAULT_CONFIG = {
-    "max_studies_per_hour": 30,
-    "default_modalities": ["US"],
+    "max_studies_per_hour": 50,
+    "default_modalities": ["CT", "MR", "XR", "US"],
     "default_ae_titles": {
-        "US": "LOGIQF5"
+        "CT": "CT01",
+        "MR": "MR01", 
+        "XR": "XR01",
+        "US": "US01"
     },
     "character_set": "ISO_IR 100",
-    "performing_physician": "DR.RADIOLOGI",
-    "usg_logiq_f5": {
-        "station_name": "USG_LOGIQ_F5",
-        "manufacturer": "GE Healthcare",
-        "model": "LOGIQ F5",
-        "software_version": "R1.0.0",
-        "default_procedure_codes": {
-            "abdomen": "US_ABD",
-            "pelvis": "US_PEL", 
-            "obstetric": "US_OB",
-            "gynecology": "US_GYN",
-            "thyroid": "US_THY",
-            "breast": "US_BRE"
-        }
-    }
+    "performing_physician": "DR.RADIOLOGI"
 }
 
 def load_config():
@@ -49,38 +38,36 @@ def load_config():
         return DEFAULT_CONFIG
 
 def get_his_data():
-    """Simulate HIS/RIS integration for USG LOGIQ F5"""
+    """Simulate HIS/RIS integration - replace with actual API call"""
     today = datetime.datetime.now().strftime('%Y%m%d')
     
-    # USG LOGIQ F5 specific procedures
+    # Simulated data from HIS/RIS
     return [
         {
             "patient_name": "INDONESIA^PERIKSA",
             "patient_id": "P000123",
-            "accession_number": f"USG-{today}-0001",
-            "modality": "US",
-            "ae_title": "LOGIQF5",
+            "accession_number": f"RAD-{today}-0001",
+            "modality": "CT",
+            "ae_title": "CT01",
             "date": today,
             "time": "081500",
-            "study_description": "USG ABDOMEN",
-            "procedure_code": "US_ABD"
+            "study_description": "CT THORAX CONTRAST"
         },
         {
-            "patient_name": "DOE^JANE",
+            "patient_name": "DOE^JOHN",
             "patient_id": "P000124", 
-            "accession_number": f"USG-{today}-0002",
-            "modality": "US",
-            "ae_title": "LOGIQF5",
+            "accession_number": f"RAD-{today}-0002",
+            "modality": "MR",
+            "ae_title": "MR01",
             "date": today,
             "time": "090000",
-            "study_description": "USG OBSTETRI",
-            "procedure_code": "US_OB"
+            "study_description": "MR BRAIN"
         }
     ]
 
 def generate_worklist_dcm(order, config):
-    """Generate DICOM worklist file for USG LOGIQ F5"""
-    filename = f"USG-{order['accession_number']}.dcm"
+    """Generate DICOM worklist file"""
+    filename = f"ORD-{order['accession_number']}.dcm"
     filepath = os.path.join(WORKLIST_PATH, filename)
 
     file_meta = pydicom.Dataset()
@@ -94,16 +81,14 @@ def generate_worklist_dcm(order, config):
     ds.PatientID = order['patient_id']
     ds.AccessionNumber = order['accession_number']
 
-    # Scheduled Procedure Step for USG LOGIQ F5
+    # Scheduled Procedure Step
     sps_item = pydicom.Dataset()
-    sps_item.Modality = "US"
-    sps_item.ScheduledStationAETitle = "LOGIQF5"
-    sps_item.ScheduledStationName = config.get('usg_logiq_f5', {}).get('station_name', 'USG_LOGIQ_F5')
+    sps_item.Modality = order.get('modality', 'CT')
+    sps_item.ScheduledStationAETitle = order.get('ae_title', 'CT01')
     sps_item.ScheduledProcedureStepStartDate = order.get("date")
     sps_item.ScheduledProcedureStepStartTime = order.get("time")
     sps_item.ScheduledPerformingPhysicianName = config.get('performing_physician', 'DR.RADIOLOGI')
     sps_item.ScheduledProcedureStepDescription = order.get('study_description', '')
-    sps_item.RequestedProcedureID = order.get('procedure_code', 'US_GEN')
 
     ds.ScheduledProcedureStepSequence = [sps_item]
 
@@ -115,7 +100,7 @@ def generate_worklist_dcm(order, config):
 
     try:
         ds.save_as(filepath)
-        logger.info(f"Generated USG LOGIQ F5 worklist: {filename}")
+        logger.info(f"Generated worklist: {filename}")
         return True
     except Exception as e:
         logger.error(f"Failed to generate {filename}: {e}")
@@ -141,8 +126,8 @@ def cleanup_old_worklists():
         logger.info(f"Cleaned up {removed_count} old worklist files")
 
 def main():
-    """Main execution function for USG LOGIQ F5"""
-    logger.info("Starting USG LOGIQ F5 worklist generation")
+    """Main execution function"""
+    logger.info("Starting worklist generation")
     
     # Ensure worklist directory exists
     os.makedirs(WORKLIST_PATH, exist_ok=True)
@@ -162,7 +147,7 @@ def main():
         if generate_worklist_dcm(order, config):
             success_count += 1
     
-    logger.info(f"Generated {success_count}/{len(orders)} USG LOGIQ F5 worklist files")
+    logger.info(f"Generated {success_count}/{len(orders)} worklist files")
 
 if __name__ == "__main__":
     main()
