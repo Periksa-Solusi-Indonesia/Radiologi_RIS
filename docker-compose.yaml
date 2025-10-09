@@ -38,7 +38,7 @@ services:
       - dicom-network
 
   postgresql:
-    image: bitnami/postgresql:14.17.0
+    image: postgres:18-alpine3.21
     restart: unless-stopped
     environment:
       - POSTGRESQL_USERNAME=orthanc
