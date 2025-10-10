@@ -1,11 +1,7 @@
 {
   "RestApiWriteToFileSystemEnabled": true,
   "RemoteAccessAllowed": true,
-  "AuthenticationEnabled": true,
-  "RegisteredUsers": {
-    "admin": "admin123",
-    "radiologist": "radio123"
-  },
+  "AuthenticationEnabled": false,
   "Worklists": {
     "Enable": true,
     "Database": "/worklists"
