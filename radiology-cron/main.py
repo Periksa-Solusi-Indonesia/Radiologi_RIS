@@ -50,7 +50,10 @@ def load_config():
 
 def get_his_data():
     """Simulate HIS/RIS integration for USG LOGIQ F5"""
-    today = datetime.datetime.now().strftime('%Y%m%d')
+    now = datetime.datetime.now()
+    today = now.strftime('%Y%m%d')
+    current_time = now.strftime('%H%M%S')  # Format HHMMSS untuk DICOM
+    
     # Short date format for accession number (last 6 digits: YYMMDD)
     short_date = today[2:]  # 20251002 -> 251002
 
@@ -63,7 +66,7 @@ def get_his_data():
             "modality": "US",
             "ae_title": "LOGIQF5",
             "date": today,
-            "time": "081500",
+            "time": current_time,  # Menggunakan waktu saat ini
             "study_description": "USG ABDOMEN",
             "procedure_code": "US_ABD"
         },
@@ -74,7 +77,7 @@ def get_his_data():
             "modality": "US",
             "ae_title": "LOGIQF5",
             "date": today,
-            "time": "090000",
+            "time": current_time,  # Menggunakan waktu saat ini
             "study_description": "USG OBSTETRI",
             "procedure_code": "US_OB"
         }
@@ -85,18 +88,35 @@ def generate_worklist_dcm(order, config):
     filename = f"{order['accession_number']}.dcm"
     filepath = os.path.join(WORKLIST_PATH, filename)
 
+    # Create basic DICOM file meta information
     file_meta = pydicom.Dataset()
+    file_meta.MediaStorageSOPClassUID = "1.2.840.10008.5.1.4.31"  # Modality Worklist
+    file_meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
+    file_meta.TransferSyntaxUID = pydicom.uid.ExplicitVRLittleEndian
+    file_meta.ImplementationClassUID = "1.2.3.4.5.6.7"
+    file_meta.ImplementationVersionName = "PYDICOM_WORKLIST_1.0"
+
     ds = FileDataset(filepath, {}, file_meta=file_meta, preamble=b"\0" * 128)
+    ds.is_little_endian = True
+    ds.is_implicit_VR = False
 
     # Character encoding
     ds.SpecificCharacterSet = config.get('character_set', 'ISO_IR 100')
 
-    # Patient information
-    ds.PatientName = order['patient_name']
-    ds.PatientID = order['patient_id']
-    ds.AccessionNumber = order['accession_number']
+    # Required DICOM tags for worklist
+    ds.StudyDate = order.get("date")
+    ds.StudyTime = order.get("time")
+    ds.AccessionNumber = order['accession_number'][:16]  # SH VR max 16 chars
+    ds.Modality = "US"
+    ds.ReferringPhysicianName = ""
+    ds.StudyDescription = order.get('study_description', '')[:64]  # LO VR max 64 chars
+    ds.PatientName = order['patient_name'][:64]  # PN VR max 64 chars
+    ds.PatientID = order['patient_id'][:16]  # LO VR max 16 chars
+    ds.PatientBirthDate = ""
+    ds.PatientSex = ""
+    ds.RequestingPhysician = config.get('performing_physician', 'DR.RADIOLOGI')[:64]  # PN VR max 64 chars
 
-    # Scheduled Procedure Step for USG LOGIQ F5
+    # Scheduled Procedure Step Sequence
     sps_item = pydicom.Dataset()
     sps_item.Modality = "US"
     sps_item.ScheduledStationAETitle = "LOGIQF5"
@@ -109,11 +129,11 @@ def generate_worklist_dcm(order, config):
 
     ds.ScheduledProcedureStepSequence = [sps_item]
 
-    # DICOM UIDs
+    # DICOM UIDs for Modality Worklist
     ds.StudyInstanceUID = pydicom.uid.generate_uid()
     ds.SeriesInstanceUID = pydicom.uid.generate_uid()
     ds.SOPInstanceUID = pydicom.uid.generate_uid()
-    ds.SOPClassUID = "1.2.840.10008.5.1.4.31"
+    ds.SOPClassUID = "1.2.840.10008.5.1.4.31"  # Modality Worklist Information Model SOP Class
 
     try:
         ds.save_as(filepath)
