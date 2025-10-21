@@ -7,6 +7,7 @@ services:
     ports:
       - "8042:8042"
       - "4242:4242"
+      - "104:104"
     environment:
       ORTHANC__REGISTERED_USERS: "{}"
       VERBOSE_STARTUP: "true"
@@ -33,22 +34,29 @@ services:
       - ./orthanc.json:/etc/orthanc/orthanc.json
       - ./worklists:/worklists
     depends_on:
-      - postgresql
+      postgresql:
+        condition: service_healthy
     networks:
       - dicom-network
 
   postgresql:
-    image: bitnami/postgresql:latest
+    image: postgres:16
     restart: unless-stopped
     environment:
-      - POSTGRESQL_USERNAME=orthanc
-      - POSTGRESQL_PASSWORD=orthanc_password
-      - POSTGRESQL_DATABASE=orthanc
-      - ALLOW_EMPTY_PASSWORD=no
+      POSTGRES_USER: orthanc
+      POSTGRES_PASSWORD: orthanc_password
+      POSTGRES_DB: orthanc
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
     volumes:
-      - ./postgresql_data:/bitnami/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orthanc -d orthanc"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - dicom-network
 
@@ -60,7 +68,8 @@ services:
     environment:
       PGWEB_DATABASE_URL: "postgres://orthanc:orthanc_password@postgresql:5432/orthanc?sslmode=disable"
     depends_on:
-      - postgresql
+      postgresql:
+        condition: service_healthy
     networks:
       - dicom-network
 

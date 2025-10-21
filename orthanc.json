@@ -10,7 +10,6 @@
     "PACS_SERVER": ["PACS_SERVER", "127.0.0.1", 4242],
     "LOGIQF5": ["LOGIQF5", "192.168.1.3", 104],
     "LOGIQF": ["LOGIQF-000000", "192.168.1.3", 104]
-
   },
   "DicomAet": "ORTHANC",
   "DicomPort": 4242,
