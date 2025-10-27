@@ -96,6 +96,35 @@ Orthanc is a robust and versatile DICOM server, perfect for managing medical ima
 
 For more information, visit the [Orthanc official website](https://www.orthanc-server.com/) and explore the extensive [documentation](https://book.orthanc-server.com/).
 
+## Worklist Management
+
+This project includes comprehensive worklist management capabilities through the Orthanc REST API. For detailed documentation on creating and managing worklists, see [WORKLIST-API.md](doc/WORKLIST-API.md).
+
+### Key Features
+
+- Create worklists programmatically via REST API
+- Query existing worklists
+- Integration with web applications
+- Support for various DICOM modalities
+
+### Quick Example
+
+```bash
+curl -X POST http://localhost:8042/tools/create-dicom \
+  -H "Content-Type: application/json" \
+  -d '{
+    "PatientID": "12345",
+    "PatientName": "Toto",
+    "ScheduledProcedureStepSequence": {
+      "ScheduledStationAETitle": "WLM_SCP",
+      "ScheduledProcedureStepStartDate": "20231201",
+      "ScheduledProcedureStepStartTime": "080000"
+    }
+  }'
+```
+
+For deployment instructions, see [DEPLOYMENT.md](doc/DEPLOYMENT.md).
+
 ## S3
 
 "AwsS3Storage" : {

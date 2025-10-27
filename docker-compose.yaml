@@ -32,6 +32,9 @@ services:
     volumes:
       - ./orthanc-data:/var/lib/orthanc/db
       - ./orthanc.json:/etc/orthanc/orthanc.json
+      # Worklists volume is used for the legacy approach
+      # The recommended approach is to use the Orthanc REST API
+      # See doc/WORKLIST-API.md for more information
       - ./worklists:/worklists
     depends_on:
       postgresql:

@@ -46,11 +46,36 @@ https://www.dicomlibrary.com/dicom/modality/
 
 ## Worklist Generation
 
+### Using Orthanc REST API (Recommended)
+
+Create worklists directly through the Orthanc REST API:
+
+```bash
+# Example using curl
+curl -X POST http://localhost:8042/tools/create-dicom \
+  -H "Content-Type: application/json" \
+  -d '{
+    "PatientID": "12345",
+    "PatientName": "Toto",
+    "ScheduledProcedureStepSequence": {
+      "ScheduledStationAETitle": "WLM_SCP",
+      "ScheduledProcedureStepStartDate": "20231201",
+      "ScheduledProcedureStepStartTime": "080000"
+    }
+  }'
+```
+
+For detailed documentation, see [WORKLIST-API.md](WORKLIST-API.md)
+
+### Legacy Method (DCMTK)
+
 ```bash
 cd radiology-cron
 python3 main.py
 ```
 - check : pip install pydicom
+
+Note: This method is deprecated in favor of the REST API approach.
 
 ## Troubleshooting
 

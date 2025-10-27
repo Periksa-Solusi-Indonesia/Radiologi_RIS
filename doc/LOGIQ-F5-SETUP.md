@@ -20,7 +20,8 @@ Dokumen ini menjelaskan cara mengkonfigurasi alat USG GE LOGIQ F5 untuk:
 ✅ LOGIQF5 terdaftar di DicomModalities
 ✅ AE Title Orthanc: `ORTHANC`
 ✅ AE Title LOGIQ F5: `LOGIQF5`
-✅ Python script untuk generate worklist
+✅ Python script untuk generate worklist (legacy)
+✅ REST API untuk create worklist (recommended)
 
 ---
 
@@ -212,6 +213,48 @@ docker logs -f orthanc
   }
 }
 ```
+
+---
+
+## Worklist Generation Methods
+
+### Method 1: Orthanc REST API (Recommended)
+
+Create worklists directly through the Orthanc REST API:
+
+```bash
+curl -X POST http://localhost:8042/tools/create-dicom \
+  -H "Content-Type: application/json" \
+  -d '{
+    "PatientID": "US251027001",
+    "PatientName": "TEST^PATIENT",
+    "ScheduledProcedureStepSequence": {
+      "ScheduledStationAETitle": "LOGIQF5",
+      "ScheduledProcedureStepStartDate": "20231201",
+      "ScheduledProcedureStepStartTime": "080000",
+      "ScheduledProcedureStepDescription": "US ABDOMEN"
+    }
+  }'
+```
+
+### Method 2: Python Script (Legacy)
+
+```bash
+cd radiology-cron
+python3 main.py
+```
+
+### Comparison
+
+| Feature | REST API | Python Script |
+|---------|----------|---------------|
+| Real-time creation | ✅ | ❌ |
+| Web integration | ✅ | ❌ |
+| File system dependency | ❌ | ✅ |
+| Error handling | ✅ | Limited |
+| Maintenance | Low | High |
+
+For detailed API documentation, see [WORKLIST-API.md](WORKLIST-API.md)
 
 ---
 
