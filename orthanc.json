@@ -15,6 +15,14 @@
     "Username": "orthanc",
     "Password": "orthanc_password"
   },
+  "ExtraMainDicomTags": {
+    "Instance": [
+      "PatientName",
+      "PatientID",
+      "PatientBirthDate",
+      "PatientSex"
+    ]
+  },
   "DicomModalities": {
     "PACS_SERVER": ["PACS_SERVER", "127.0.0.1", 4242],
     "SIMULATOR": ["WLM_SCP", "127.0.0.1", 11112],
