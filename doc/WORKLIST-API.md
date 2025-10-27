@@ -323,3 +323,9 @@ curl http://localhost:8042/tools/find -X POST -d '{
 https://orthanc.uclouvain.be/book/plugins/worklists-plugin.html#troubleshooting-c-find-queries
 
 https://www.dicomlibrary.com/dicom/modality/
+
+## Cara Kerja Worklist
+1. Worklist entries dibuat melalui REST API Orthanc atau ditempatkan di folder /worklists
+2. Peralatan medis (seperti LOGIQ F5) melakukan query DICOM-C-FIND ke worklist provider
+3. Worklist provider mengembalikan daftar pemeriksaan yang tersedia
+4. Peralatan medis memilih pemeriksaan dan melanjutkan proses imaging
