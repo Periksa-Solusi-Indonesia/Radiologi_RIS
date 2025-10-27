@@ -8,6 +8,7 @@
   },
   "PostgreSQL": {
     "Enable": true,
+    "EnableStorage": true,
     "Host": "postgresql",
     "Port": 5432,
     "Database": "orthanc",
