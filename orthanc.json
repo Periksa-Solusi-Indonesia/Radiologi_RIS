@@ -6,6 +6,14 @@
     "Enable": true,
     "Database": "/worklists"
   },
+  "PostgreSQL": {
+    "Enable": true,
+    "Host": "postgresql",
+    "Port": 5432,
+    "Database": "orthanc",
+    "Username": "orthanc",
+    "Password": "orthanc_password"
+  },
   "DicomModalities": {
     "PACS_SERVER": ["PACS_SERVER", "127.0.0.1", 4242],
     "SIMULATOR": ["WLM_SCP", "127.0.0.1", 11112],
