@@ -1,0 +1,13 @@
+(0008,0050) SH [20230101000000.000000+0000] #  26, 1 AccessionNumber
+(0010,0010) PN [Test^Patient] #  12, 1 PatientName
+(0010,0020) LO [12345] #   6, 1 PatientID
+(0010,0030) DA [19800115] #   8, 1 PatientBirthDate
+(0010,0040) CS [M] #   2, 1 PatientSex
+(0040,0100) SQ #  0, 1 ScheduledProcedureStepSequence
+  (fffe,e000) na #  0, 0 Item
+    (0008,0060) CS [CR] #   2, 1 Modality
+    (0040,0001) AE [WLM_SCP] #   8, 1 ScheduledStationAETitle
+    (0040,0002) DA [20231201] #   8, 1 ScheduledProcedureStepStartDate
+    (0040,0003) TM [080000] #   6, 1 ScheduledProcedureStepStartTime
+  (fffe,e00d) na #  0, 0 ItemDelimitationItem
+(fffe,e0dd) na #  0, 0 SequenceDelimitationItem

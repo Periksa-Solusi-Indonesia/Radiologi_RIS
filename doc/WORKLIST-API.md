@@ -321,3 +321,5 @@ curl http://localhost:8042/tools/find -X POST -d '{
 
 
 https://orthanc.uclouvain.be/book/plugins/worklists-plugin.html#troubleshooting-c-find-queries
+
+https://www.dicomlibrary.com/dicom/modality/
