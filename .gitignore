@@ -1,6 +1,12 @@
 /orthanc-data
 /postgresql_data
-/data
+# Keep directory structure but ignore contents
+/data/*
+!data/.gitkeep
+!data/postgresql/.gitkeep
+# Specifically ignore PostgreSQL data files
+/data/postgresql/*
+!data/postgresql/.gitkeep
 /backups
 *.log
 .env
