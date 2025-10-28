@@ -177,20 +177,21 @@ Berikut adalah contoh lengkap pembuatan worklist dengan semua data pasien termas
 curl -X POST http://localhost:8042/tools/create-dicom \
   -H "Content-Type: application/json" \
   -d '{
-    "PatientID": "P001234",
-    "PatientName": "DOE^JOHN",
-    "PatientBirthDate": "19800115",
-    "PatientSex": "M",
-    "AccessionNumber": "ACC123456",
-    "StudyDescription": "USG ABDOMEN",
-    "ScheduledProcedureStepSequence": {
-      "ScheduledStationAETitle": "WLM_SCP",
-      "ScheduledProcedureStepStartDate": "20231201",
-      "ScheduledProcedureStepStartTime": "083000",
-      "ScheduledProcedureStepDescription": "USG ABDOMEN COMPLETE",
-      "ScheduledProcedureStepID": "PROC001"
-    }
-  }'
+      "Tags" : {
+        "PatientID": "PID-4111115",
+        "PatientName": "Toto aaaa",
+        "PatientBirthDate": "19800115",
+        "PatientSex": "M",
+        "AccessionNumber": "ACC12345611111",
+        "ScheduledProcedureStepSequence" : [
+          {
+            "Modality": "US",
+            "ScheduledProcedureStepStartDate": "20251014",
+            "ScheduledProcedureStepDescription": "Description"
+          }
+        ]
+      }
+    }'
 ```
 
 ## Integrasi dengan Aplikasi Web

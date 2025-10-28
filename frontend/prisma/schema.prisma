@@ -1,0 +1,218 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(RADIOLOGIST)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  studies   Study[]
+  reports   Report[]
+
+  @@map("users")
+}
+
+model Patient {
+  id                String   @id @default(cuid())
+  patientId         String   @unique
+  name              String
+  birthDate         DateTime
+  sex               Gender
+  address           String?
+  phone             String?
+  email             String?
+  emergencyContact  String?
+  emergencyPhone    String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  studies           Study[]
+  documents         Document[]
+
+  @@map("patients")
+}
+
+model Study {
+  id                String   @id @default(cuid())
+  studyInstanceUID  String   @unique
+  accessionNumber   String   @unique
+  studyDate         DateTime
+  studyTime         DateTime
+  studyDescription  String?
+  referringPhysician String?
+  status            StudyStatus @default(SCHEDULED)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Foreign Keys
+  patientId         String
+  radiologistId     String?
+
+  // Relations
+  patient           Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  radiologist       User?   @relation(fields: [radiologistId], references: [id])
+  series            Series[]
+  reports           Report[]
+
+  @@map("studies")
+}
+
+model Series {
+  id                  String   @id @default(cuid())
+  seriesInstanceUID   String   @unique
+  seriesNumber        String
+  modality            Modality
+  seriesDescription   String?
+  bodyPartExamined    String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // Foreign Keys
+  studyId             String
+
+  // Relations
+  study               Study     @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  instances           Instance[]
+
+  @@map("series")
+}
+
+model Instance {
+  id                  String   @id @default(cuid())
+  sopInstanceUID      String   @unique
+  instanceNumber      String
+  contentTime         DateTime?
+  rows                Int?
+  columns             Int?
+  bitsAllocated       Int?
+  bitsStored          Int?
+  highBit             Int?
+  pixelRepresentation Int?
+  samplesPerPixel     Int?
+  photometricInterpretation String?
+  planarConfiguration Int?
+  orthancInstanceId   String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // Foreign Keys
+  seriesId            String
+
+  // Relations
+  series              Series @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+
+  @@map("instances")
+}
+
+model Report {
+  id                String   @id @default(cuid())
+  reportId          String   @unique
+  findings          String?
+  impression        String?
+  recommendation    String?
+  status            ReportStatus @default(DRAFT)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Foreign Keys
+  studyId           String
+  radiologistId     String
+
+  // Relations
+  study             Study @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  radiologist       User  @relation(fields: [radiologistId], references: [id])
+
+  @@map("reports")
+}
+
+model Document {
+  id                String   @id @default(cuid())
+  fileName          String
+  filePath          String
+  fileType          String
+  fileSize          Int
+  description       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Foreign Keys
+  patientId         String
+
+  // Relations
+  patient           Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@map("documents")
+}
+
+enum Role {
+  ADMIN
+  RADIOLOGIST
+  REFERRING_PHYSICIAN
+  TECHNICIAN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Modality {
+  CT
+  MR
+  XA
+  RF
+  US
+  MG
+  PT
+  NM
+  SC
+  DX
+  CR
+  DR
+  OT
+  EC
+  ES
+  GM
+  IO
+  IV
+  KM
+  LS
+  PX
+  RG
+  ST
+  TG
+  XC
+}
+
+enum StudyStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ReportStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  FINAL
+}
