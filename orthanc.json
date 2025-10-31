@@ -24,9 +24,9 @@
     ]
   },
   "DicomModalities": {
-    "PACS_SERVER": ["PACS_SERVER", "127.0.0.1", 4242],
-    "SIMULATOR": ["WLM_SCP", "127.0.0.1", 11112],
-    "ORTHANC": ["ORTHANC", "127.0.0.1", 4242]
+    // "PACS_SERVER": ["PACS_SERVER", "127.0.0.1", 4242],
+    // "SIMULATOR": ["WLM_SCP", "127.0.0.1", 11112],
+    // "ORTHANC": ["ORTHANC", "127.0.0.1", 4242]
   },
   "DicomAet": "ORTHANC",
   "DicomPort": 4242,
